@@ -1,0 +1,26 @@
+{
+  "name": "js-scheme",
+  "version": "1.0.0",
+  "main": "scheme.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "$(npm bin)/mocha -u tdd"
+  },
+  "author": "Lajos Koszti <ajnasz@ajnasz.hu>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ajnasz/js-scheme.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ajnasz/js-scheme/issues"
+  },
+  "homepage": "https://github.com/Ajnasz/js-scheme#readme",
+  "description": "A PoC to implement scheme for js object storage"
+}

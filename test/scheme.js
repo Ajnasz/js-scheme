@@ -22,6 +22,7 @@ suite('shceme.js', function () {
 			deepObject: {
 				num: Number,
 				str: String,
+				arr: [String],
 				more: {
 					bool: Boolean
 				}
@@ -148,6 +149,7 @@ suite('shceme.js', function () {
 			aModel.set('deepObject', {
 				num: '1234',
 				str: 1234,
+				arr: [999],
 				more: {
 					bool: 0
 				}
@@ -156,6 +158,7 @@ suite('shceme.js', function () {
 			assert.deepEqual(aModel.get('deepObject'), {
 				num: 1234,
 				str: '1234',
+				arr: ['999'],
 				more: {
 					bool: false
 				}

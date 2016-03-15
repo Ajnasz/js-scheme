@@ -16,7 +16,16 @@ suite('shceme.js', function () {
 			bool: Boolean,
 			date: Date,
 			array: Array,
-			obj: Object
+			obj: Object,
+			stringArr: [String],
+			numberArr: [Number],
+			deepObject: {
+				num: Number,
+				str: String,
+				more: {
+					bool: Boolean
+				}
+			}
 		};
 	});
 
@@ -32,7 +41,6 @@ suite('shceme.js', function () {
 	});
 
 	suite('get value without scheme', function () {
-
 		test('unkown should not change', function () {
 			aModel.set('unknown', 123);
 			assert.strictEqual(aModel.get('unknown'), 123);
@@ -40,7 +48,6 @@ suite('shceme.js', function () {
 	});
 
 	suite('get value with scheme', function () {
-
 		test('string', function () {
 			aModel.set('str', 123);
 			assert.strictEqual(aModel.get('str'), '123');
@@ -95,10 +102,10 @@ suite('shceme.js', function () {
 			});
 
 			suite('invalid values', function () {
-
 				setup(function () {
 					aModel.validateScheme = true;
 				});
+
 				teardown(function () {
 					delete aModel.validateScheme;
 				});
@@ -117,6 +124,41 @@ suite('shceme.js', function () {
 						aModel.get('obj');
 					});
 				});
+			});
+		});
+	});
+
+	suite('array of values', function () {
+		suite('string array', function () {
+			test('Should convert all values to string', function () {
+				aModel.set('stringArr', ['foobar', 123, null]);
+				assert.deepEqual(aModel.get('stringArr'), ['foobar', '123', 'null']);
+			});
+		});
+		suite('number array', function () {
+			test('Should convert all values to number', function () {
+				aModel.set('numberArr', ['123', null, '1234.123']);
+				assert.deepEqual(aModel.get('numberArr'), [123, 0, 1234.123]);
+			});
+		});
+	});
+
+	suite('deep object', function () {
+		test('casting object properties', function () {
+			aModel.set('deepObject', {
+				num: '1234',
+				str: 1234,
+				more: {
+					bool: 0
+				}
+			});
+
+			assert.deepEqual(aModel.get('deepObject'), {
+				num: 1234,
+				str: '1234',
+				more: {
+					bool: false
+				}
 			});
 		});
 	});

@@ -16,15 +16,39 @@ function isArray(value) {
 	return Array.isArray(value);
 }
 
-function findValue(obj, name) {
+function toArray(value) {
+	'use strict';
+
+	return isArray(value) ? value : [value];
+}
+
+function getValue(obj, name) {
 	'use strict';
 
 	return name.split('.').reduce(function (accu, value) {
-		if (isUndef(accu)) { // trying to get property on a nonexistent object
+		if (isUndef(accu)) {
 			return;
 		}
 
 		return accu[value];
+	}, obj);
+}
+
+function setValue(obj, name, value) {
+	'use strict';
+
+	var nameArr = name.split('.'),
+		nameArrLen = nameArr.length,
+		lastIndex = nameArrLen - 1;
+
+	nameArr.reduce(function (accu, key, index) {
+		if (index === lastIndex) {
+			accu[key] = value;
+		} else if (isUndef(accu[key])) {
+			accu[key] = Object.create(null);
+		}
+
+		return accu[key];
 	}, obj);
 }
 
@@ -55,14 +79,23 @@ function applyScheme(Scheme, value) {
 		if (Scheme === Date) {
 			output = new Scheme(value);
 		} else if (Scheme === Array)  {
-			// how should handle arrays
-			output = (isArray(value)) ? value : Scheme(value);
+			// how should handle arrays?
+			output = toArray(value);
 		} else if (Scheme === Object) {
 			if (isString(value)) {
 				output = JSON.parse(value);
 			} else {
 				output = Scheme(value);
 			}
+		} else if (isArray(Scheme)) {
+			output = toArray(value).map(function (i) {
+				return applyScheme(Scheme[0], i);
+			});
+		} else if (typeof Scheme === 'object') {
+			output = Object.keys(Scheme).reduce(function (accu, key) {
+				accu[key] = applyScheme(Scheme[key], value[key]);
+				return accu;
+			}, {});
 		} else {
 			output = Scheme(value).valueOf();
 		}
@@ -88,19 +121,7 @@ var model = {
 	set: function (name, value) {
 		'use strict';
 
-		var nameArr = name.split('.'),
-			nameArrLen = nameArr.length,
-			lastIndex = nameArrLen - 1;
-
-		nameArr.reduce(function (accu, key, index) {
-			if (index === lastIndex) {
-				accu[key] = value;
-			} else if (isUndef(accu[key])) {
-				accu[key] = Object.create(null);
-			}
-
-			return accu[key];
-		}, this.data);
+		setValue(this.data, name, value);
 	},
 
 	get: function (name) {
@@ -108,9 +129,8 @@ var model = {
 
 		var value, Scheme, output;
 
-		value = findValue(this.data, name);
-
-		Scheme = findValue(this.scheme, name);
+		value = getValue(this.data, name);
+		Scheme = getValue(this.scheme, name);
 
 		output = applyScheme(Scheme, value);
 

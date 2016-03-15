@@ -76,11 +76,11 @@ suite('shceme.js', function () {
 		test('array', function () {
 			aModel.set('array', [1, 2, 3]);
 			assert(aModel.get('array') instanceof Array);
-			assert.deepEqual(aModel.get('array'), [1, 2, 3]);
+			assert.deepStrictEqual(aModel.get('array'), [1, 2, 3]);
 
 			aModel.set('array', '1234');
 			assert(aModel.get('array') instanceof Array, 'not an array');
-			assert.deepEqual(aModel.get('array'), ['1234']);
+			assert.deepStrictEqual(aModel.get('array'), ['1234']);
 		});
 
 		suite('object', function () {
@@ -133,13 +133,13 @@ suite('shceme.js', function () {
 		suite('string array', function () {
 			test('Should convert all values to string', function () {
 				aModel.set('stringArr', ['foobar', 123, null]);
-				assert.deepEqual(aModel.get('stringArr'), ['foobar', '123', 'null']);
+				assert.deepStrictEqual(aModel.get('stringArr'), ['foobar', '123', 'null']);
 			});
 		});
 		suite('number array', function () {
 			test('Should convert all values to number', function () {
 				aModel.set('numberArr', ['123', null, '1234.123']);
-				assert.deepEqual(aModel.get('numberArr'), [123, 0, 1234.123]);
+				assert.deepStrictEqual(aModel.get('numberArr'), [123, 0, 1234.123]);
 			});
 		});
 	});
@@ -155,7 +155,7 @@ suite('shceme.js', function () {
 				}
 			});
 
-			assert.deepEqual(aModel.get('deepObject'), {
+			assert.deepStrictEqual(aModel.get('deepObject'), {
 				num: 1234,
 				str: '1234',
 				arr: ['999'],

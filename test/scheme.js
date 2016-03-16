@@ -1,4 +1,4 @@
-var model = require('../scheme');
+var Model = require('../scheme');
 var assert = require('assert');
 
 
@@ -8,9 +8,7 @@ suite('shceme.js', function () {
 	var aModel;
 
 	setup(function () {
-		aModel = Object.create(model);
-
-		aModel.scheme = {
+		var scheme = {
 			str: String,
 			num: Number,
 			bool: Boolean,
@@ -26,6 +24,8 @@ suite('shceme.js', function () {
 				}
 			}
 		};
+
+		aModel = new Model(scheme);
 	});
 
 	teardown(function () {
@@ -33,9 +33,9 @@ suite('shceme.js', function () {
 	});
 
 	suite('get undefined value', function () {
-		test('str should be undefined', function () {
+		test('whatever should be undefined', function () {
 			var undef;
-			assert.strictEqual(aModel.get('str'), undef);
+			assert.strictEqual(aModel.get('whatever'), undef);
 		});
 	});
 
@@ -99,14 +99,14 @@ suite('shceme.js', function () {
 				}
 			});
 
-			assert.deepStrictEqual(aModel.get('deepObject'), {
-				num: 1234,
-				str: '1234',
-				arr: ['999'],
-				more: {
-					bool: false
-				}
-			});
+			var expected = Object.create(null);
+			expected.num = 1234;
+			expected.str = '1234';
+			expected.arr = ['999'];
+			expected.more = Object.create(null);
+			expected.more.bool = false;
+
+			assert.deepStrictEqual(aModel.get('deepObject'), expected);
 		});
 	});
 });

@@ -15,8 +15,6 @@ suite('shceme.js', function () {
 			num: Number,
 			bool: Boolean,
 			date: Date,
-			array: Array,
-			obj: Object,
 			stringArr: [String],
 			numberArr: [Number],
 			deepObject: {
@@ -73,60 +71,6 @@ suite('shceme.js', function () {
 			assert.equal(aModel.get('date').getTime(), 1458045578065);
 		});
 
-		test('array', function () {
-			aModel.set('array', [1, 2, 3]);
-			assert(aModel.get('array') instanceof Array);
-			assert.deepStrictEqual(aModel.get('array'), [1, 2, 3]);
-
-			aModel.set('array', '1234');
-			assert(aModel.get('array') instanceof Array, 'not an array');
-			assert.deepStrictEqual(aModel.get('array'), ['1234']);
-		});
-
-		suite('object', function () {
-			suite('valid values', function () {
-				test('json string', function () {
-					aModel.set('obj', '{"a": 1}');
-					assert(aModel.get('obj') instanceof Object, 'not an obj');
-				});
-
-				test('null object', function () {
-					aModel.set('obj', null);
-					assert(aModel.get('obj') instanceof Object, 'not an obj');
-				});
-
-				test('number', function () {
-					aModel.set('foo.bar.baz', 1);
-					assert(aModel.get('foo.bar.baz'), 1);
-					assert.equal(typeof aModel.get('foo.bar'), 'object');
-				});
-			});
-
-			suite('invalid values', function () {
-				setup(function () {
-					aModel.validateScheme = true;
-				});
-
-				teardown(function () {
-					delete aModel.validateScheme;
-				});
-
-				test('invalid json object', function () {
-					aModel.set('obj', '{a: 1}');
-					assert.throws(function () {
-						aModel.get('obj');
-					});
-				});
-
-				test('simple json string', function () {
-					aModel.set('obj', '"little string"');
-
-					assert.throws(function () {
-						aModel.get('obj');
-					});
-				});
-			});
-		});
 	});
 
 	suite('array of values', function () {

@@ -4,12 +4,6 @@ function isUndef(value) {
 	return typeof value === 'undefined';
 }
 
-function isString(value) {
-	'use strict';
-
-	return typeof value === 'string';
-}
-
 function isArray(value) {
 	'use strict';
 
@@ -78,15 +72,6 @@ function applyScheme(Scheme, value) {
 	} else if (!isUndef(value)) {
 		if (Scheme === Date) {
 			output = new Scheme(value);
-		} else if (Scheme === Array)  {
-			// how should handle arrays?
-			output = toArray(value);
-		} else if (Scheme === Object) {
-			if (isString(value)) {
-				output = JSON.parse(value);
-			} else {
-				output = Scheme(value);
-			}
 		} else if (isArray(Scheme)) {
 			output = toArray(value).map(function (i) {
 				return applyScheme(Scheme[0], i);
